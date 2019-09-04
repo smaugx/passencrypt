@@ -1,0 +1,3 @@
+altgraph==0.16.1
+macholib==1.11
+PyInstaller==3.5

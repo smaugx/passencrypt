@@ -8,7 +8,7 @@ import pdb
 import argparse
 
 original_pass_file = '/etc/.CaoCao.data'
-encrypt_pass_file  = '~/.CaoCao.encrypt'
+encrypt_pass_file  = '/etc/.CaoCao.encrypt'
 
 # each line as one item
 pass_cache = []
@@ -33,6 +33,7 @@ def encode_from_original_file():
         print("error, no need reinit")
         return False
     status = False
+    fenc, fori = None, None
     try:
         fenc = open(encrypt_pass_file, 'wb')
         fori = open(original_pass_file, 'rb')
@@ -46,8 +47,10 @@ def encode_from_original_file():
     except Exception as e:
         print("Exception: {0}".format(e))
     finally:
-        fenc.close()
-        fori.close()
+        if fenc:
+            fenc.close()
+        if fori:
+            fori.close()
     return status
     
 
@@ -134,6 +137,10 @@ def dump_pass_cache_to_original_pass_file():
 
 
 if __name__ == '__main__':
+    version = int(sys.version_info.major)
+    if version < 3:
+        print("python at least version 3.x")
+        sys.exit()
     parser = argparse.ArgumentParser()
     parser.description='这个工具用来很方便的管理和隐藏个人的密码'
     parser.add_argument('pow', type=int, help='login token')
